@@ -22,15 +22,6 @@ function setScrollableViewViews(_views) {
 	    initializePagingControl();  
 	}
 };
-
-// Exports setHeight
-exports.setHeight = setControlHeight;
-function setControlHeight(_value) {
-  if(_value) {
-    $.container.setHeight(_value);
-  }
-};
-
 // Set the view parameters as children of the ScrollableView
 setScrollableViewViews(args.children);
 
@@ -47,22 +38,19 @@ function setControlHeight(_value) {
 
 // Highlight the selected view
 exports.setCurrentPage = setScrollableViewCurrentPage;
-function setScrollableViewCurrentPage(currentIndex) {
+function setScrollableViewCurrentPage(currentIndex, animated) {
+
+	animated = _.isBoolean(animated) ? animated : true;
+
 	_.each($.pagingControlButtons.children, function(pagingDot, index) {
 		pagingDot.opacity = (index == currentIndex) ? 1 : disabledDotOpacity;
 	});
-};
 
-//get current page index
-exports.getCurrentPage = getScrollableViewCurrentPage;
-function getScrollableViewCurrentPage() {
-	return $.scrollableView.getCurrentPage();
-};
 
-//get total pages
-exports.getTotalPages = getTotalScrollableView;
-function getTotalScrollableView() {
-	return totalPages;
+	if ($.scrollableView.getCurrentPage() !== currentIndex) {
+
+		animated ? $.scrollableView.scrollToView(currentIndex) : $.scrollableView.setCurrentPage(currentIndex);
+	}
 };
 
 // Initialize the dots in the faux paging control
@@ -124,3 +112,19 @@ exports.unbind = $.scrollableView.removeEventListener;
 // Overwrite Backbone trigger and Titanium fireEvent methods for convenience
 exports.trigger = $.scrollableView.fireEvent;
 exports.fireEvent = $.scrollableView.fireEvent;
+
+exports.getCurrentPage = function() { return $.scrollableView.getCurrentPage(); };
+exports.getTotalPages = function() { return $.scrollableView.getViews().length - 1; };
+
+exports.showPagingControl = function() {
+
+	$.pagingControl.show();
+
+}; // END showPagingControl()
+
+
+exports.hidePagingControl = function() {
+
+	$.pagingControl.hide();
+
+}; // END hidePagingControl()
