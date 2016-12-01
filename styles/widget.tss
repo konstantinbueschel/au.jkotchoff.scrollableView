@@ -1,3 +1,8 @@
+'.pagingControlDotImage': {
+
+	width: '16dp',
+	height: '16dp'
+},
 "#container" : {
   height: Ti.UI.SIZE
 },
